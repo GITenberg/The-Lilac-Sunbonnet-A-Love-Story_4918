@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: BKBmPmRRNHErl3kSN5SHm4gzqcaOznr78Z8RQu1T+gRsGEGsCKkk/nybVdI+2KaEaMoEsoSOc1IR6nW/pzLb+V1h+uD84zXJ1kgP4LNoYTWnCaiRpZVK7snmFoxx095NsL6ZdGradNWAZv8yKoPafA0LG8ucfw1XcQwJTxsMNumdLz/LQLpYez+AJbQ36yUmVlX2l81dKuszg4q3QXgif7lZNUrHfNQkDHx4BfrYiP+qb7fyF9rI3NNUY3nN5Fe7vNCpQdvbiEsHmCl0rwt6qXfmBhQBl5YTiiU53HrDgxiqWhRoXHkGhoG2HVf7bH5OunFH11jO1GeNh8OhHtlcKi1vMf9GjPeDVC00D0kkAEcKpy1LjjVPw3M6yuP/1lv7gwk3ZFLftOnA2XA6mlr/1IkM4vYOCCRApCEOZTzND+Sw4Fx0b4tpc2h/B/+fAK7a/9BhBpuI9NDpZyUQ0viqxmj88/7lkhub6NG+PMHxIPNrvK2HZEJNSQReRP0QiU3ck0ccfxkq62qOgqYfOW+B/nEaso+z7oeDySuwo7GOctV6m+AxUmsw5GgBZOBaSaA7DPFzmJGBmHq5AB7/xUyocRnImdHV/bmI3DkgM6FDYd7iusZYs/xR8yngZTJbKahizL989SIYjLW/ptru4zDxgQMsibLySIIs36uqt+orImI=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/The-Lilac-Sunbonnet-A-Love-Story_4918
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
