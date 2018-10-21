@@ -1,5 +1,5 @@
 _repo: The-Lilac-Sunbonnet-A-Love-Story_4918
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -27,5 +27,6 @@ subjects:
 - !lcsh 'Fiction'
 - !lcsh 'Love stories'
 - !lcc 'PR'
+- GITenberg
 title: 'The Lilac Sunbonnet: A Love Story'
 url: http://www.gutenberg.org/ebooks/4918
